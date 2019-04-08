@@ -29,7 +29,12 @@ module.exports = {
             // AND `<script>` blocks in `.vue` files
             {
               test: /\.js$/,
-              loader: 'babel-loader'
+              loader: 'babel-loader',
+              options: {
+                plugins: [
+                    "@babel/plugin-syntax-dynamic-import"
+                ]
+            }
             },
             // this will apply to both plain `.css` files
             // AND `<style>` blocks in `.vue` files
