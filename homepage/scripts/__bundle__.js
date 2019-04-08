@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("// dynamic imports are within functions so they don't happen until called\nDMP_CONTEXT.loadBundle({\n  \"homepage/index\": () => [Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(null, /*! ./index.js */ \"./homepage/scripts/index.js\")), Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(null, /*! ./../styles/index.css */ \"./homepage/styles/index.css\", 7))],\n  \"homepage/base_ajax\": () => [],\n  \"homepage/base\": () => [Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(null, /*! ./../styles/base.css */ \"./homepage/styles/base.css\", 7))]\n});\n\n//# sourceURL=webpack:///./homepage/scripts/__entry__.js?");
+eval("// Contains links for app: homepage\n(context => {\n  DMP_CONTEXT.loadBundle({\n    \"homepage/index\": function () {\n      __webpack_require__(/*! ./index.js */ \"./homepage/scripts/index.js\");\n\n      __webpack_require__(/*! ./../styles/index.css */ \"./homepage/styles/index.css\");\n    },\n    \"homepage/base_ajax\": function () {},\n    \"homepage/base\": function () {\n      __webpack_require__(/*! ./../styles/base.css */ \"./homepage/styles/base.css\");\n    }\n  });\n})(DMP_CONTEXT.get());\n\n//# sourceURL=webpack:///./homepage/scripts/__entry__.js?");
 
 /***/ }),
 

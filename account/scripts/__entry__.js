@@ -1,18 +1,15 @@
-// dynamic imports are within functions so they don't happen until called
-DMP_CONTEXT.loadBundle({
-
-    "account/index": () => [
-        import(/* webpackMode: "eager" */ "./index.js"),
-        import(/* webpackMode: "eager" */ "./../styles/index.css"),
-    ],
-
-    "account/sign-up": () => [
-    ],
-
-    "account/base_ajax": () => [
-    ],
-
-    "account/app_base": () => [
-    ],
-
-})
+// Contains links for app: account
+(context => {
+    DMP_CONTEXT.loadBundle({
+        "account/index": function() {
+            require("./index.js");
+            require("./../styles/index.css");
+        },
+        "account/sign-up": function() {
+        },
+        "account/base_ajax": function() {
+        },
+        "account/app_base": function() {
+        },
+    });
+})(DMP_CONTEXT.get());
