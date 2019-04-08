@@ -92,14 +92,19 @@ AUTH_USER_MODEL = 'account.User'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'intex2',
-        'USER': 'rad',
-        'PASSWORD': 'McRn4ever!',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'hhs_opioid_db',
+        'HOST': 'hhs-opioid.database.windows.net',
+        'USER': 'hhsadmin',
+        'PASSWORD': 'SayNo2Opioids!',
+
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        }
     }
 }
 
