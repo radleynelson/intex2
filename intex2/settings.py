@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_mako_plus',
     'homepage',
     'account',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

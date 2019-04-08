@@ -20,6 +20,8 @@ def process_request(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
+            request.session['pageMessage'] = "Thanks for signing up!";
+            request.session['showMessage'] = True
             return HttpResponseRedirect('/', user)
 
     else:

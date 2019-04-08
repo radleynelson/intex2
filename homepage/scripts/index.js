@@ -2,22 +2,33 @@
 import Vue from 'vue'
 import App from './src/App.vue'
 import router from './src/router'
+import store from './src/store.js';
+
 
 Vue.config.productionTip = false
-export default function(context) {
-    // utc_epoch comes from index.py
-    console.log('Current epoch in UTC is ' + context.utc_epoch);
-      
-}
+import Jumbotron from 'bootstrap-vue/es/components/jumbotron'
+Vue.use(Jumbotron)
+import Card from 'bootstrap-vue/es/components/card'
+Vue.use(Card)
+import Layout from 'bootstrap-vue/es/components/layout'
+Vue.use(Layout)
+import Alert from 'bootstrap-vue/es/components/alert'
+Vue.use(Alert)
 
-window.addEventListener('load', function () {
-  new Vue({
+
+document.addEventListener("DOMContentLoaded", (context => () => {
+  // your JS code here
+  let homePageVue = new Vue({
     el: '#app',
     router,
+    store,
     components: { App },
-    template: '<App/>'
+    template: '<App />'
   })
-  
-  console.log(Vue);
-})
+  console.log(homePageVue.$store);
+  homePageVue.$store.commit('setUserName', context.data.user)
+  homePageVue.$store.commit('setShowMessage', context.data.showMessage)
+  homePageVue.$store.commit('setPageMessage', context.data.pageMessage)
+
+})(DMP_CONTEXT.get()))
 

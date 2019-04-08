@@ -17,6 +17,8 @@ def process_request(request):
         if form.is_valid():
           user = authenticate(username=request.POST['Username'], password=request.POST['Password'])
           login(request, user)
+          request.session['pageMessage'] = "Welcome back " + user.username;
+          request.session['showMessage'] = True
           return HttpResponseRedirect('/', user)
         else:
             forms.ValidationError("Wrongo")
