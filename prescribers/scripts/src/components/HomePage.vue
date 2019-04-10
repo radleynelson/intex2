@@ -6,7 +6,6 @@
         Sorting By: <b>{{ sortBy }}</b>, Sort Direction:
         <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
       </div>
-
        <b-pagination
       v-model="currentPage"
       :total-rows="rows"
@@ -15,9 +14,9 @@
     ></b-pagination>
     <div style="text-align: left; max-width: 65px; padding-bottom: 5px;">
       <select class="custom-select" v-model="perPage" name="" id="">
-        <option>5</option>
-        <option>10</option>
         <option>25</option>
+        <option>50</option>
+        <option>100</option>
       </select>
     </div>
     <div style="margin:auto; max-width: 800px; padding-bottom: 5px; grid-template: auto auto auto/auto auto auto; display: grid; grid-column-gap: 10px;">
@@ -42,9 +41,8 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         :filter='filterText'
-        :filter-function='customFilter'
-        striped = 'true'
-        bordered = 'true'
+        :striped = 'true'
+        :bordered = 'true'
         @filtered="onFiltered"
       >
         <template slot="drugname" slot-scope="data">
@@ -54,6 +52,9 @@
         </template>
       
       </b-table>
+      <div v-if="!dataLoaded">
+        <b-spinner style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
+      </div>
       <b-pagination
       v-model="currentPage"
       :total-rows="rows"
@@ -62,9 +63,9 @@
     ></b-pagination>
     <div style="text-align: left; max-width: 65px; padding-bottom: 5px;">
       <select class="custom-select" v-model="perPage" name="" id="">
-        <option>5</option>
-        <option>10</option>
         <option>25</option>
+        <option>50</option>
+        <option>100</option>
       </select>
     </div>
       
@@ -78,17 +79,25 @@ export default {
   data() {
       return {
         currentPage: 1,
-        sortBy: 'opioids__drugname',
+        sortBy: 'risk_rank',
         perPage: 25,
-        sortDesc: false,
+        sortDesc: true,
         filterString: '',
         filterNumber: '',
-        rows: 1,
+        //rows: 1,
         filterBool: '',
         fields: [
-          { key: 'drugname', label: 'Drug Name', sortable: true },
-          { key: 'isopioid', label: 'Is Opiod', sortable: true },
-          { key: 'total_prescriptions', label: 'Number of Prescriptions', sortable: true }
+          { key: 'doctorid', label: 'Doctor Id', sortable: true },
+          { key: 'fname', label: 'First Name', sortable: true },
+          { key: 'lname', label: 'Last Name', sortable: true },
+          { key: 'gender', label: 'Gender', sortable: true },
+          { key: 'overdoses__abbrev', label: 'State', sortable: true },
+          { key: 'credentials', label: 'Credentials', sortable: true },
+          { key: 'risk_rank', label: 'Risk Rank', sortable: true },
+          { key: 'isoutlier', label: 'Over Prescriber', sortable: true },
+          { key: 'totalprescriptions', label: 'Total Prescriptions', sortable: true },
+          { key: 'numberofopioidsprescribed', label: 'Opioids Prescribed', sortable: true },
+          { key: 'specialties__specialty', label: 'Specialty', sortable: true }
         ],
       }
     },
@@ -97,7 +106,13 @@ export default {
       return this.$store.getters.userName
     },
     items() {
-      return this.$store.getters.drugsList;
+      return this.$store.getters.prescribersList;
+    },
+    dataLoaded(){
+      return this.$store.getters.prescribersList.length > 0
+    },
+    rows(){
+      return this.$store.getters.prescribersList.length;
     },
     filterText(){
       if (this.filterString != '')
@@ -110,7 +125,7 @@ export default {
 
   },
   created(){
-    this.$store.dispatch('getDrugs');
+    this.$store.dispatch('getPrescribers');
   },
   mounted(){
     this.rows = this.items.length;

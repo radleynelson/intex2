@@ -14,13 +14,13 @@ export default new Vuex.Store({
     userName: '',
     showMessage: false,
     pageMessage: '',
-    drugsList: '',
+    prescribersList: '',
   },
   getters: {
     userName: state => state.userName,
     showMessage: state => state.showMessage,
     pageMessage: state => state.pageMessage,
-    drugsList: state => state.drugsList,
+    prescribersList: state => state.prescribersList,
 
   },
   mutations: {
@@ -33,23 +33,15 @@ export default new Vuex.Store({
     setPageMessage(state, pageMessage){
       state.pageMessage = pageMessage;
     },
-    setDrugsList(state, drugsList){
-      state.drugsList = drugsList
+    setPrescribersList(state, prescribersList){
+      state.prescribersList = prescribersList
     },
     
   },
   actions: {
-    getDrugs(context) {
-      return axios.get('/drugs/index.drugs_list').then(res => {
-        res.data.forEach(element => {
-          if (element.isopioid == 1){
-            element.isopioid = 'Yes'
-          }
-          else{
-            element.isopioid = 'No'
-          }
-        });
-        context.commit('setDrugsList', res.data)
+    getPrescribers(context) {
+      return axios.get('/prescribers/index.prescribers_list').then(res => {
+        context.commit('setPrescribersList', res.data)
       }).catch(err => {
         console.log(err);
       })
