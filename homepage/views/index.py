@@ -5,12 +5,6 @@ from datetime import datetime, timezone
 @view_function
 def process_request(request):
     utc_time = datetime.utcnow()
-    print(1111111111)
-    print()
-    print()
-    print()
-    print()
-    print()
 
     username = str(request.user.username)
     pageMessage = ''
@@ -41,3 +35,6 @@ def process_request(request):
         }
     }
     return request.dmp.render('index.html', context)
+
+
+    

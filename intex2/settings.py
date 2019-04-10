@@ -26,7 +26,7 @@ SECRET_KEY = '0z1=6=mb6pnw-$u$yz04*o)ob-3xucvk*dj74)zr1yv&9h=pxs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['is-celebrities-consulting.com', 'localhost']
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'homepage',
     'account',
     'dashboard',
+    'drugs',
+    'prescribers',
 ]
 
 MIDDLEWARE = [

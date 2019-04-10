@@ -5,7 +5,7 @@ STOP_RENDERING = runtime.STOP_RENDERING
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 10
-_modified_time = 1554698820.013661
+_modified_time = 1554822614.731009
 _enable_loop = True
 _template_filename = '/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm'
 _template_uri = 'base.htm'
@@ -19,16 +19,16 @@ def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
-        self = context.get('self', UNDEFINED)
         request = context.get('request', UNDEFINED)
         def content():
             return render_content(context._locals(__M_locals))
+        self = context.get('self', UNDEFINED)
         __M_writer = context.writer()
         __M_writer('<!DOCTYPE html>\n<html>\n    <meta charset="UTF-8">\n    <head>\n\n        <title>DMP</title>\n\n')
         __M_writer('        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>\n\n')
         __M_writer('        <script src="/django_mako_plus/dmp-common.min.js"></script>\n        ')
         __M_writer(django_mako_plus.ExpressionPostProcessor(self)( django_mako_plus.links(self) ))
-        __M_writer('\n\n        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">\n        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>\n        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">\n\n    </head>\n    <body>\n\n        <header>\n            <nav class="navbar navbar-expand-lg navbar-light bg-light">\n                <div class="container">\n                  <a class="navbar-brand" href="#">Group 2-13 Intex</a>\n                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">\n                  <span class="navbar-toggler-icon"></span>\n                </button>\n              \n                  <div class="collapse navbar-collapse" id="navbarSupportedContent">\n                    <ul class="navbar-nav ml-auto">\n                        <li class="nav-item">\n                            <a class="nav-link" href="#">Contact</a>\n                        </li>\n                        <li class="nav-item">\n                            <a class="nav-link" href="#">About</a>\n                        </li>\n')
+        __M_writer('\n\n        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">\n        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>\n        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">\n        <link\n        type="text/css"\n        rel="stylesheet"\n        href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"\n        />\n\n\n    </head>\n    <body>\n\n        <header>\n            <nav class="navbar navbar-expand-lg navbar-light bg-light">\n                <div class="container">\n                  <a class="navbar-brand" href="#">Group 2-13 Intex</a>\n                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">\n                  <span class="navbar-toggler-icon"></span>\n                </button>\n              \n                  <div class="collapse navbar-collapse" id="navbarSupportedContent">\n                    <ul class="navbar-nav ml-auto">\n                        <li class="nav-item">\n                            <a class="nav-link" href="#">Contact</a>\n                        </li>\n                        <li class="nav-item">\n                            <a class="nav-link" href="#">About</a>\n                        </li>\n')
         if request.user.is_superuser:
             __M_writer('                            <li class="nav-item">\n                                <a class="nav-link" href="/dashboard">Dashboard</a>\n                            </li>\n')
         if not request.user.is_authenticated:
@@ -62,6 +62,6 @@ def render_content(context,**pageargs):
 
 """
 __M_BEGIN_METADATA
-{"filename": "/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm", "uri": "base.htm", "source_encoding": "utf-8", "line_map": {"18": 0, "27": 2, "28": 10, "29": 13, "30": 14, "31": 14, "32": 39, "33": 40, "34": 44, "35": 45, "36": 57, "37": 58, "38": 60, "39": 60, "40": 67, "45": 76, "51": 74, "57": 74, "63": 57}}
+{"filename": "/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm", "uri": "base.htm", "source_encoding": "utf-8", "line_map": {"18": 0, "27": 2, "28": 10, "29": 13, "30": 14, "31": 14, "32": 45, "33": 46, "34": 50, "35": 51, "36": 63, "37": 64, "38": 66, "39": 66, "40": 73, "45": 82, "51": 80, "57": 80, "63": 57}}
 __M_END_METADATA
 """
