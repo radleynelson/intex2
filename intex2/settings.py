@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'account',
     'dashboard',
     'drugs',
+    'prescribers',
 ]
 
 MIDDLEWARE = [
