@@ -56,4 +56,29 @@ def prescribers_list(request):
 
     return JsonResponse(data, safe=False)
 
+@view_function
+def prescriber(request, id:dmod.Prescribers):
+    
+    if not request.user.is_authenticated:
+        return JsonResponse('You must be authorized to access this data', safe=False)
+
+    queryset = dmod.Prescribers.objects.select_related('specialties','overdoses').filter(id = id.id)
+    p1 = queryset.values('gender','opioid_prescriber','risk_rank','isoutlier','overdoses__abbrev','specialties__specialty')
+    p2 = queryset.values('id','doctorid','fname','lname','credentials','totalprescriptions','numberofopioidsprescribed')
+    drugList = dmod.Triple.objects.select_related('opioids').filter(prescribers = id).values('qty', 'opioids__drugname','opioids__isopioid', 'opioids__id')
+
+
+    data = list(p1)
+    dataLeft=list(p2)
+    drugs = list(drugList)
+
+    PrescriberDrugs = {
+        'PrescriberData': data,
+        'PrescriberDataLeft': dataLeft,
+        'drugs': drugs
+    }
+    
+
+    return JsonResponse(PrescriberDrugs, safe=False)
+
 

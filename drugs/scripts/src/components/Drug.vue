@@ -131,6 +131,7 @@
                 return Math.floor(Math.random() * (50 - 5 + 1)) + 5
             },
             getData(){
+                this.currentDrug = [],
                 this.dataVisible = false;
                 this.chartdata.labels = []
                 this.chartdata.datasets[0].data = []
@@ -146,7 +147,6 @@
                 drug['Drug Name'] = res.data.drug[0].drugname;
                 drug.Opioid = res.data.drug[0].isopioid == 1 ? 'Yes' : 'No';
                 drug['Total Times Prescribed'] = res.data.drug[0].total_prescriptions;
-                console.log(res.data.drug)
                 this.currentDrug.push(drug);
                 
             }).catch(err => {

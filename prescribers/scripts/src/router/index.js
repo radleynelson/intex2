@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '../components/HomePage.vue'
 import Test from '../components/Test.vue'
-import Drug from '../components/Drug.vue'
+import Prescriber from '../components/Prescriber.vue'
 
 Vue.use(Router)
 
@@ -20,8 +20,8 @@ export default new Router({
     },
     {
       path: '/items/:id',
-      name: 'Drug',
-      component: Drug
+      name: 'Prescriber',
+      component: Prescriber
     },
   ]
 })

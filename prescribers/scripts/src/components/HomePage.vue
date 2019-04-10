@@ -46,9 +46,9 @@
         :bordered = 'true'
         @filtered="onFiltered"
       >
-        <template slot="drugname" slot-scope="data">
-          <router-link :to="{ name: 'Drug', params: {id: data.item.id}}">
-            {{data.item.drugname}}
+        <template slot="doctorid" slot-scope="data">
+          <router-link :to="{ name: 'Prescriber', params: {id: data.item.id}}">
+            {{data.item.doctorid}}
           </router-link>          
         </template>
       
@@ -134,19 +134,6 @@ export default {
   },
   methods: {
     customFilter(item, filterText) {
-      // if (typeof filterText === 'string' || filterText instanceof String)
-      // {
-      //   if(item.drugname.toLowerCase().includes(filterText.toLowerCase())) return true;
-      // }
-      // else if (typeof filterText == "boolean")
-      // {
-      //   if(item.isopioid == 'Yes') return true;
-      // }
-      // else if (typeof filterText == "number")
-      // {
-      //   if(item.total_prescriptions > filterText) return true;
-      // }
-
       let numfilter = false;
       let boolfilter = false;
       let stringfilter = false;

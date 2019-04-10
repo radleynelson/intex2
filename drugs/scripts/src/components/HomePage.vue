@@ -24,15 +24,15 @@
     </div>
     <div style="margin:auto; max-width: 800px; padding-bottom: 5px; grid-template: auto auto auto/auto auto auto; display: grid; grid-column-gap: 10px;">
         <label style="padding: 0; margin: auto;" for="FilterText">Drug Name:</label>
-        <label style="padding: 0; margin: auto;" for="FilterText">#Presciptions:</label>
         <label style="padding: 0; margin: auto;" for="FilterText">Opioid:</label>
+        <label style="padding: 0; margin: auto;" for="FilterText">#Presciptions:</label>
         <input type="text" v-model="filterString" id='FilterText' class="form-control" aria-describedby="search" placeholder="Search">
-        <input type="number" v-model="filterNumber" id='FilterText' class="form-control" aria-describedby="search" placeholder="Search">
         <select class="custom-select" v-model="filterBool" name="" id="">
           <option value="0">-</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
+        <input type="number" v-model="filterNumber" id='FilterText' class="form-control" aria-describedby="search" placeholder="Search">
 
     </div>
        <b-table
@@ -120,18 +120,7 @@ export default {
   },
   methods: {
     customFilter(item, filterText) {
-      // if (typeof filterText === 'string' || filterText instanceof String)
-      // {
-      //   if(item.drugname.toLowerCase().includes(filterText.toLowerCase())) return true;
-      // }
-      // else if (typeof filterText == "boolean")
-      // {
-      //   if(item.isopioid == 'Yes') return true;
-      // }
-      // else if (typeof filterText == "number")
-      // {
-      //   if(item.total_prescriptions > filterText) return true;
-      // }
+      
 
       let numfilter = false;
       let boolfilter = false;
