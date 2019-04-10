@@ -19,6 +19,8 @@
         <option>10</option>
         <option>25</option>
       </select>
+      <button @click="ExportCSV" style="margin-top: 10px; margin-bottom: 10px;" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
+
     </div>
     <div style="margin:auto; max-width: 800px; padding-bottom: 5px; grid-template: auto auto auto/auto auto auto; display: grid; grid-column-gap: 10px;">
         <label style="padding: 0; margin: auto;" for="FilterText">Drug Name:</label>
@@ -73,6 +75,7 @@
 </template>
 
 <script>
+import { ExportToCsv } from 'export-to-csv';
 export default {
   name: 'HomePage',
   data() {
@@ -159,6 +162,26 @@ export default {
         this.rows = filteredItems.length
         this.currentPage = 1
         console.log('testing')
+      },
+      ExportCSV(){
+        let data = this.items;
+
+        const options = { 
+          fieldSeparator: ',',
+          quoteStrings: '"',
+          decimalSeparator: '.',
+          showLabels: true, 
+          showTitle: true,
+          title: 'My Awesome CSV',
+          useTextFile: false,
+          useBom: true,
+          useKeysAsHeaders: true,
+          // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+        };
+ 
+      const csvExporter = new ExportToCsv(options);
+ 
+      csvExporter.generateCsv(data);
       }
   },
   

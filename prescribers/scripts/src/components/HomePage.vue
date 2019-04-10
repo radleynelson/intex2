@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <div class="homepage">
-      <h1>Drugs</h1>
+      <h1>Prescribers</h1>
       <div>
         Sorting By: <b>{{ sortBy }}</b>, Sort Direction:
         <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
@@ -18,6 +18,7 @@
         <option>50</option>
         <option>100</option>
       </select>
+      <button v-if="dataLoaded" @click="ExportCSV" style="margin-top: 10px; margin-bottom: 10px;" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
     </div>
     <div style="margin:auto; max-width: 800px; padding-bottom: 5px; grid-template: auto auto auto/auto auto auto; display: grid; grid-column-gap: 10px;">
         <label style="padding: 0; margin: auto;" for="FilterText">Drug Name:</label>
@@ -74,6 +75,7 @@
 </template>
 
 <script>
+import { ExportToCsv } from 'export-to-csv';
 export default {
   name: 'HomePage',
   data() {
@@ -174,6 +176,26 @@ export default {
         this.rows = filteredItems.length
         this.currentPage = 1
         console.log('testing')
+      },
+      ExportCSV(){
+        let data = this.items;
+
+        const options = { 
+          fieldSeparator: ',',
+          quoteStrings: '"',
+          decimalSeparator: '.',
+          showLabels: true, 
+          showTitle: true,
+          title: 'My Awesome CSV',
+          useTextFile: false,
+          useBom: true,
+          useKeysAsHeaders: true,
+          // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+        };
+ 
+      const csvExporter = new ExportToCsv(options);
+ 
+      csvExporter.generateCsv(data);
       }
   },
   
