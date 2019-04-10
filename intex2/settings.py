@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'homepage',
     'account',
     'dashboard',
+    'drugs',
 ]
 
 MIDDLEWARE = [

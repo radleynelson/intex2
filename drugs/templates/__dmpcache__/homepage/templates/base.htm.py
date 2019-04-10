@@ -5,10 +5,10 @@ STOP_RENDERING = runtime.STOP_RENDERING
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 10
-_modified_time = 1554822614.731009
+_modified_time = 1554822614.7125819
 _enable_loop = True
 _template_filename = '/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm'
-_template_uri = 'base.htm'
+_template_uri = 'homepage/templates/base.htm'
 _source_encoding = 'utf-8'
 import django_mako_plus
 import django.utils.html
@@ -62,6 +62,6 @@ def render_content(context,**pageargs):
 
 """
 __M_BEGIN_METADATA
-{"filename": "/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm", "uri": "base.htm", "source_encoding": "utf-8", "line_map": {"18": 0, "27": 2, "28": 10, "29": 13, "30": 14, "31": 14, "32": 45, "33": 46, "34": 50, "35": 51, "36": 63, "37": 64, "38": 66, "39": 66, "40": 73, "45": 82, "51": 80, "57": 80, "63": 57}}
+{"filename": "/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm", "uri": "homepage/templates/base.htm", "source_encoding": "utf-8", "line_map": {"18": 0, "27": 2, "28": 10, "29": 13, "30": 14, "31": 14, "32": 45, "33": 46, "34": 50, "35": 51, "36": 63, "37": 64, "38": 66, "39": 66, "40": 73, "45": 82, "51": 80, "57": 80, "63": 57}}
 __M_END_METADATA
 """
