@@ -2,18 +2,23 @@
   <div class="app">
     <div class="homepage">
       <b-jumbotron bg-variant="dark" text-variant="white" border-variant="dark">
-        <template slot="header">Group 2-13 Intex</template>
+        <template slot="header">
+          <div style="width: 35%; margin: auto;">
+            <img style="width: 100%" src='/static/homepage/media/logo2White.png' alt="Our Logo">
+          </div>
+        </template>
 
         <template slot="lead">
-          Welcome {{userName}}, we hope that you enjoy our Intex 2 Project that we have worked very hard on! Let us know what you think
+         
         </template>
 
         <hr class="my-4">
 
-        <p>
-          It uses utility classes for typography and spacing to space content out within the larger
-          container.
-        </p>
+        <div style="width: 75%; margin: auto;">
+          <h5>
+            First class business consulting services, using cutting edge technologies to solve unstructured business problems.
+          </h5>
+        </div>
       </b-jumbotron>
 
       <b-card-group deck>
@@ -45,11 +50,12 @@
 </template>
 
 <script>
+import logo from '../images/logo2White.png'
 export default {
   name: 'HomePage',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
     }
   },
   computed: {

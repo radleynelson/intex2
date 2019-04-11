@@ -58,6 +58,7 @@
                     </b-tab>
                     <b-tab title="Related Users">
                         <section>
+                            <h2 style="margin-bottom: 25px" v-if="finalRelatedUsers.length > 1">Related Users</h2>
                             <div v-if="finalRelatedUsers.length < 1">
                                 <b-spinner variant='info' style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
                             </div>
@@ -80,7 +81,6 @@
                             </div>
                         </section>
                     </b-tab>
-                    <b-tab title="disabled" disabled><p>Disabled tab!</p></b-tab>
                 </b-tabs>  
             </div>
         </section>

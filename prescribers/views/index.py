@@ -132,4 +132,75 @@ def related_prescribers(request, prescriber:dmod.Prescribers):
     return JsonResponse(data, safe=False)
 
 
+@view_function
+def edit_prescriber(request, prescriber:dmod.Prescribers):
+    
+    if not request.user.is_authenticated:
+        return JsonResponse('You must be authorized to access this data', safe=False)
+
+    if not request.user.has_perm('admin.crud'):
+        return JsonResponse('You do not have sufficient rights to access this content', safe=False)
+    p1 = dmod.Prescribers.objects.filter(id=prescriber.id).values()
+
+    return JsonResponse(list(p1), safe=False)
+
+@view_function
+def update_prescriber(request, prescriber:dmod.Prescribers = None):
+    
+    if not request.user.is_authenticated:
+        return JsonResponse('You must be authorized to access this data', safe=False)
+
+    if not request.method == 'POST':
+        return JsonResponse('Please Send Post Data', safe=False)
+
+    if not request.user.has_perm('admin.crud'):
+        return JsonResponse('You do not have sufficient rights to access this content', safe=False)
+
+    print(request.body)
+
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    content = body['fname']
+    if prescriber is None:
+        p1 = dmod.Prescribers()
+    else:
+        p1 = dmod.Prescribers.objects.filter(id=prescriber.id).first()
+
+    p1.fname = body['fname']
+    p1.lname = body['lname']
+    p1.credentials = body['credentials']
+    p1.opioid_prescriber = body['opioid_prescriber']
+    p1.numberofopioidsprescribed = body['numberofopioidsprescribed']
+    p1.overdoses = dmod.Overdoses.objects.get(id=body['overdoses_id'])
+    p1.specialties = dmod.Specialties.objects.get(id=body['specialties_id'])
+    p1.doctorid = body['doctorid']
+    p1.gender = body['gender']
+    p1.totalprescriptions = body['totalprescriptions']
+    p1.save()
+
+    return JsonResponse("Saved Successfully", safe=False)
+
+
+@view_function
+def delete_prescriber(request, prescriber:dmod.Prescribers):
+    
+    if not request.user.is_authenticated:
+        return JsonResponse('You must be authorized to access this data', safe=False)
+
+    if not request.user.has_perm('admin.crud'):
+        return JsonResponse('You do not have sufficient rights to access this content', safe=False)
+
+    if prescriber is None:
+        JsonResponse("Not Foud for Deletion", safe=False)
+    else:
+        p1 = dmod.Prescribers.objects.filter(id=prescriber.id).first()
+        p1.delete()
+
+    
+    return JsonResponse("Deleted Successfully Successfully", safe=False)
+
+
+
+
+
 

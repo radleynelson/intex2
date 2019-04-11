@@ -24,7 +24,18 @@ import Spinner from 'bootstrap-vue/es/components/spinner'
 Vue.use(Spinner)
 import Tabs from 'bootstrap-vue/es/components/tabs'
 Vue.use(Tabs)
-
+import Form from 'bootstrap-vue/es/components/form'
+Vue.use(Form)
+import Button from 'bootstrap-vue/es/components/button'
+Vue.use(Button)
+import FormGroup from 'bootstrap-vue/es/components/form-group'
+Vue.use(FormGroup)
+import FormSelect from 'bootstrap-vue/es/components/form-select'
+Vue.use(FormSelect)
+import FormCheckbox from 'bootstrap-vue/es/components/form-checkbox'
+Vue.use(FormCheckbox)
+import FormInput from 'bootstrap-vue/es/components/form-input'
+Vue.use(FormInput)
 
 document.addEventListener("DOMContentLoaded", (context => () => {
   // your JS code here

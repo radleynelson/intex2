@@ -2,6 +2,8 @@
   <div class="app">
     <div class="homepage">
       <h1>Prescribers</h1>
+      <b-spinner v-if="deleting" style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
+
       <div>
         Sorting By: <b>{{ sortBy }}</b>, Sort Direction:
         <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
@@ -18,23 +20,22 @@
         <option>50</option>
         <option>100</option>
       </select>
-      <button v-if="dataLoaded" @click="ExportCSV" style="margin-top: 10px; margin-bottom: 10px;" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
+      <div style="display: grid; grid-template: auto auto / auto auto; margin-top: 5px; grid-column-gap: 5px; margin-bottom: 10px;">
+        <button v-if="dataLoaded && !deleting" @click="ExportCSV" style="" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
+        <router-link v-if="dataLoaded && !deleting && crudPermissions" class="btn btn-success" :to="{ name: 'EditPrescriber', params: {id: 0}}">Add Prescriber</router-link>
+      </div>
     </div>
-    <div style="margin:auto; max-width: 800px; padding-bottom: 5px; grid-template: auto auto auto/auto auto auto; display: grid; grid-column-gap: 10px;">
-        <label style="padding: 0; margin: auto;" for="FilterText">Drug Name:</label>
-        <label style="padding: 0; margin: auto;" for="FilterText">#Presciptions:</label>
-        <label style="padding: 0; margin: auto;" for="FilterText">Opioid:</label>
-        <input type="text" v-model="filterString" id='FilterText' class="form-control" aria-describedby="search" placeholder="Search">
-        <input type="number" v-model="filterNumber" id='FilterText' class="form-control" aria-describedby="search" placeholder="Search">
-        <select class="custom-select" v-model="filterBool" name="" id="">
-          <option value="0">-</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-
+    <div v-if="items.length > 0 && !deleting" style="margin:auto; max-width: 500px; padding-bottom: 15px; grid-template: 1fr/1fr 1fr 4fr; display: grid; grid-column-gap: 10px;">
+        <button @click="filterSearch" class="btn btn-primary"> <i class="fas fa-search"></i></button>
+        <button @click="clearFilterSearch" class="btn btn-danger"> <i class="fas fa-backspace"></i> </button>
+        <input type="text" v-model.lazy="filterString" id='FilterText' class="form-control" aria-describedby="search" placeholder="Search">
     </div>
+     <div v-if="searching">
+        <b-spinner style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
+      </div>
        <b-table
         id="my-table"
+        :responsive="true"
         :items="items"
         :per-page="perPage"
         :current-page="currentPage"
@@ -45,18 +46,27 @@
         :striped = 'true'
         :bordered = 'true'
         @filtered="onFiltered"
-        v-if="items.length > 0"
+        @context-changed="onSearch"
+        v-if="items.length > 0 && !deleting"
       >
+
         <template slot="doctorid" slot-scope="data">
           <router-link :to="{ name: 'Prescriber', params: {id: data.item.id}}">
             {{data.item.doctorid}}
           </router-link>          
+        </template>
+        <template v-if="crudPermissions" slot="edit" slot-scope="data">
+            <router-link class="related-drug-link" :to="{ name: 'EditPrescriber', params: {id: data.item.id}}"><i class="fas fa-edit"></i></router-link>
+        </template>
+        <template v-if="crudPermissions" slot="delete" slot-scope="data">
+            <i style="cursor: pointer;" @click="deleteUser(data.item.id)" class="fas fa-trash-alt"></i>
         </template>
       
       </b-table>
       <div v-if="!dataLoaded">
         <b-spinner style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
       </div>
+     
       <b-pagination
       v-model="currentPage"
       :total-rows="rows"
@@ -77,24 +87,33 @@
 
 <script>
 import { ExportToCsv } from 'export-to-csv';
+import axios from 'axios'
+axios.defaults.withCredentials = true;
 export default {
   name: 'HomePage',
   data() {
       return {
         currentPage: 1,
         sortBy: 'risk_rank',
+        deleting: false,
         perPage: 25,
         sortDesc: true,
         filterString: '',
         filterNumber: '',
-        //rows: 1,
+        filterText: '',
+        rows: 1,
         filterBool: '',
+        searching: false,
         fields: [],
+
       }
     },
   computed: {
     userName() {
       return this.$store.getters.userName
+    },
+    crudPermissions(){
+      return this.$store.getters.permissions.includes('admin.crud')
     },
     items() {
       return this.$store.getters.prescribersList;
@@ -102,17 +121,9 @@ export default {
     dataLoaded(){
       return this.$store.getters.prescribersList.length > 0
     },
-    rows(){
+    dataRows(){
       return this.$store.getters.prescribersList.length;
     },
-    filterText(){
-      if (this.filterString != '')
-        return this.filterString;
-      else if (this.filterNumber != '' && this.filterNumber !=0)
-        return (this.filterNumber)
-      else if(this.filterBool != '')
-        return this.filterBool
-    }
 
   },
   created(){
@@ -122,36 +133,39 @@ export default {
   mounted(){
     //this.rows = this.items.length;
   },
+  watch: {
+    dataRows(newValue, oldValue) {
+      this.rows = newValue
+    }
+  },
   methods: {
-    customFilter(item, filterText) {
-      let numfilter = false;
-      let boolfilter = false;
-      let stringfilter = false;
-
-
-      if (this.filterString == '' || item.drugname.toLowerCase().includes(this.filterString.toLowerCase()))
-      {
-        stringfilter = true;
+    filterSearch(){
+      this.searching = true;
+      this.filterText = this.filterString;
+    },
+    clearFilterSearch(){
+      this.filterText = ''
+      this.filterString = ''
+    },
+    onSearch(){
+      //this.searching = true;
+    },
+    deleteUser(pid){
+      if(confirm('Are you sure you want to delete? This can not be undone' + pid)){
+        this.deleting = true
+        axios.get('/prescribers/index.delete_prescriber/' + pid).then(res => {
+          console.log(res.data)
+          //this.$store.commit('setPageMessage', 'Deleted Successfully');
+          this.$router.go()
+        }).catch(err => {
+            console.log('An error occured')
+        })
       }
-
-      if(this.filterBool == 0 || item.isopioid == this.filterBool)
-      {
-        boolfilter = true;
-      }
-      if(this.filterNumber == '' || item.total_prescriptions > this.filterNumber)
-      {
-        numfilter = true;
-      }
-
-      if(stringfilter && boolfilter && numfilter)
-      {
-        return true;
-      }
-      return false
     },
     onFiltered(filteredItems) {
         this.rows = filteredItems.length
         this.currentPage = 1
+        this.searching = false;
         console.log('testing')
       },
       ExportCSV(){
@@ -203,6 +217,11 @@ export default {
           { key: 'specialties__specialty', label: 'Specialty', sortable: true }
         ]
         }
+
+        if (this.crudPermissions){
+          this.fields.push({ key: 'edit', label: 'Edit', sortable: false })
+          this.fields.push({ key: 'delete', label: 'Delete', sortable: false })
+        }
       }
   },
   
@@ -211,5 +230,24 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.related-drug-link{
+    color: black;
+    text-decoration: none;
+}
+.related-drug-link:hover{
+    text-decoration: underline;
+}
+.add-link{
+  color: white;
+  text-decoration: none;
+}
+.add-link:hover{
+  color: white;
+  text-decoration: none;
+}
 
+.button-box {
+  text-align:center;
+  margin-top:20px;
+ }
 </style>
