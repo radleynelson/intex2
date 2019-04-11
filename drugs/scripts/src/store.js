@@ -15,12 +15,14 @@ export default new Vuex.Store({
     showMessage: false,
     pageMessage: '',
     drugsList: '',
+    permissions: '',
   },
   getters: {
     userName: state => state.userName,
     showMessage: state => state.showMessage,
     pageMessage: state => state.pageMessage,
     drugsList: state => state.drugsList,
+    permissions: state => state.permissions,
 
   },
   mutations: {
@@ -36,6 +38,9 @@ export default new Vuex.Store({
     setDrugsList(state, drugsList){
       state.drugsList = drugsList
     },
+    setPermissions(state, permissions){
+      state.permissions = permissions;
+    }
     
   },
   actions: {

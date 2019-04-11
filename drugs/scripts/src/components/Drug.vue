@@ -6,42 +6,44 @@
                 <b-table stacked :bordered=true :items="currentDrug"></b-table>
             </div>
         </div>
-        <div class="container chart-container">
-            <h3 v-if="dataVisible">Top 10 Prescribers of {{this.userList.drug[0].drugname}}</h3>
-            <div v-if="!dataVisible" class="text-center">
-                <b-spinner style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
+        
+        <section v-if="permissions">
+            <div class="container chart-container">
+                <h3 v-if="dataVisible">Top 10 Prescribers of {{this.userList.drug[0].drugname}}</h3>
+                <div v-if="!dataVisible" class="text-center">
+                    <b-spinner style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
+                </div>
+                <bar-chart
+                    v-if="dataVisible"
+                    :chartdata="chartdata"
+                    :options="options"
+                />
             </div>
-            <bar-chart
-            v-if="dataVisible"
-            :chartdata="chartdata"
-            :options="options"
-            />
-        </div>
+        </section>
         <div v-if="!relatedItemsVisible" class="text-center">
             <b-spinner variant='primary' style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
         </div>
         <div v-if="relatedItemsVisible">
-            <h2>Related Items</h2>
-            <div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Drug Name</th>
-                            <th>Times Prescirbed</th>
-                            <th>Drug Is Opioid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr :key="idx" v-for="(data, idx) in relatedItems">
-                            <td><router-link class="related-drug-link" :to="{ name: 'Drug', params: {id: data.id}}">{{data.drugname}}</router-link></td>
-                            <td>{{data.total_prescriptions}}</td>
-                            <td>{{data.isopioid == 1 ? 'Yes' : 'No'}}</td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
+            <h2>Related Drugs</h2>
+                <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Drug Name</th>
+                                <th>Times Prescirbed</th>
+                                <th>Drug Is Opioid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr :key="idx" v-for="(data, idx) in relatedItems">
+                                <td><router-link class="related-drug-link" :to="{ name: 'Drug', params: {id: data.id}}">{{data.drugname}}</router-link></td>
+                                <td>{{data.total_prescriptions}}</td>
+                                <td>{{data.isopioid == 1 ? 'Yes' : 'No'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
     </div>
 </template>
 
@@ -103,9 +105,6 @@
             }]
         },
          onClick: function(event, i){
-             console.log('it worked!!!!!!')
-             console.log(event)
-             console.log(i)
               let e = i[0];
             console.log(e._index)
             var x_value = this.data.labels[e._index];
@@ -114,6 +113,11 @@
             console.log(y_value);
          }
     }
+            }
+        },
+        computed: {
+            permissions() {
+                return this.$store.getters.permissions.includes('admin.analytics') 
             }
         },
         created(){
@@ -137,10 +141,12 @@
                 this.chartdata.datasets[0].data = []
                 axios.get('/drugs/index.drug/'+this.$route.params.id).then(res => {
                 this.userList = res.data;
-                res.data.userList.forEach(person => {
-                     this.chartdata.labels.push(person.prescribers__fname + ' ' + person.prescribers__lname)
-                     this.chartdata.datasets[0].data.push(person.qty)
-                 });
+                if(this.$store.getters.permissions.includes('admin.analytics')){
+                    res.data.userList.forEach(person => {
+                    this.chartdata.labels.push(person.prescribers__fname + ' ' + person.prescribers__lname)
+                    this.chartdata.datasets[0].data.push(person.qty)
+                });
+                }
                 this.dataVisible = true;
                 let drug = {};
                 drug['Drug Id'] = res.data.drug[0].id;

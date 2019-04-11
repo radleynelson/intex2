@@ -45,6 +45,7 @@
         :striped = 'true'
         :bordered = 'true'
         @filtered="onFiltered"
+        v-if="items.length > 0"
       >
         <template slot="doctorid" slot-scope="data">
           <router-link :to="{ name: 'Prescriber', params: {id: data.item.id}}">
@@ -88,19 +89,7 @@ export default {
         filterNumber: '',
         //rows: 1,
         filterBool: '',
-        fields: [
-          { key: 'doctorid', label: 'Doctor Id', sortable: true },
-          { key: 'fname', label: 'First Name', sortable: true },
-          { key: 'lname', label: 'Last Name', sortable: true },
-          { key: 'gender', label: 'Gender', sortable: true },
-          { key: 'overdoses__abbrev', label: 'State', sortable: true },
-          { key: 'credentials', label: 'Credentials', sortable: true },
-          { key: 'risk_rank', label: 'Risk Rank', sortable: true },
-          { key: 'isoutlier', label: 'Over Prescriber', sortable: true },
-          { key: 'totalprescriptions', label: 'Total Prescriptions', sortable: true },
-          { key: 'numberofopioidsprescribed', label: 'Opioids Prescribed', sortable: true },
-          { key: 'specialties__specialty', label: 'Specialty', sortable: true }
-        ],
+        fields: [],
       }
     },
   computed: {
@@ -128,9 +117,10 @@ export default {
   },
   created(){
     this.$store.dispatch('getPrescribers');
+    this.checkPermissions();
   },
   mounted(){
-    this.rows = this.items.length;
+    //this.rows = this.items.length;
   },
   methods: {
     customFilter(item, filterText) {
@@ -180,9 +170,39 @@ export default {
           // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
         };
  
-      const csvExporter = new ExportToCsv(options);
+        const csvExporter = new ExportToCsv(options);
  
-      csvExporter.generateCsv(data);
+        csvExporter.generateCsv(data);
+      },
+      checkPermissions(){
+        if(this.$store.getters.permissions.includes('admin.see_names')){
+          this.fields = [
+          { key: 'doctorid', label: 'Doctor Id', sortable: true },
+          { key: 'fname', label: 'First Name', sortable: true },
+          { key: 'lname', label: 'Last Name', sortable: true },
+          { key: 'gender', label: 'Gender', sortable: true },
+          { key: 'overdoses__abbrev', label: 'State', sortable: true },
+          { key: 'credentials', label: 'Credentials', sortable: true },
+          { key: 'risk_rank', label: 'Risk Rank', sortable: true },
+          { key: 'isoutlier', label: 'Over Prescriber', sortable: true },
+          { key: 'totalprescriptions', label: 'Total Prescriptions', sortable: true },
+          { key: 'numberofopioidsprescribed', label: 'Opioids Prescribed', sortable: true },
+          { key: 'specialties__specialty', label: 'Specialty', sortable: true }
+        ]
+        }
+        else{
+          this.fields = [
+          { key: 'doctorid', label: 'Doctor Id', sortable: true },
+          { key: 'gender', label: 'Gender', sortable: true },
+          { key: 'overdoses__abbrev', label: 'State', sortable: true },
+          { key: 'credentials', label: 'Credentials', sortable: true },
+          { key: 'risk_rank', label: 'Risk Rank', sortable: true },
+          { key: 'isoutlier', label: 'Over Prescriber', sortable: true },
+          { key: 'totalprescriptions', label: 'Total Prescriptions', sortable: true },
+          { key: 'numberofopioidsprescribed', label: 'Opioids Prescribed', sortable: true },
+          { key: 'specialties__specialty', label: 'Specialty', sortable: true }
+        ]
+        }
       }
   },
   

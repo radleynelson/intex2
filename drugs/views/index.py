@@ -21,6 +21,11 @@ def process_request(request):
     pageMessage = ''
     showMessage = False
 
+    userPermissions = []
+
+    if(request.user is not None):
+        userPermissions = list(request.user.get_all_permissions())
+
     try:
         pageMessage = request.session['pageMessage']
     except:
@@ -39,7 +44,8 @@ def process_request(request):
         jscontext('data'): {
             'showMessage': showMessage,
             'pageMessage': pageMessage,
-            'user': username
+            'user': username,
+            'permissions': userPermissions,
         }
     }
 
@@ -69,6 +75,8 @@ def drug(request, id:dmod.Opioids):
     d1 = dmod.Triple.objects.select_related('prescribers').filter(opioids = id).values('id','qty','prescribers__fname', 'prescribers__lname','opioids_id')[:10]
     o1 = dmod.Opioids.objects.filter(id = id.id).values()
     
+    if not request.user.has_perm('admin.analytics'):
+        d1 = []
 
     finalData = {
         'userList': list(d1),
@@ -80,17 +88,17 @@ def drug(request, id:dmod.Opioids):
 @view_function
 def related_drugs(request, id:dmod.Opioids):
     
-    url = "https://ussouthcentral.services.azureml.net/workspaces/4718f244148842c4b087009708bf0c75/services/64ded86c8c8b4dbca1450fa56462f7fe/execute"
+    url = "https://ussouthcentral.services.azureml.net/workspaces/4718f244148842c4b087009708bf0c75/services/21265032cea24fb58ad264e6d96415e4/execute"
 
     querystring = {"api-version":"2.0","details":"true"}
 
-    payload = "{\n  \"Inputs\": {\n    \"input1\": {\n      \"ColumnNames\": [\n        \"opioids_id\"\n      ],\n      \"Values\": [\n        [\n          \" " + str(id.id) + "\"\n        ]\n      ]\n    }\n  }\n}"
+    payload = "{\n  \"Inputs\": {\n    \"input1\": {\n      \"ColumnNames\": [\n        \"opioids_id\"\n      ],\n      \"Values\": [\n        [\n          \" 3\"\n        ]\n      ]\n    }\n  }\n}"
     headers = {
-        'Authorization': "Bearer W6lhok1BxokTuF1U4iPABCY0oXHyJXeTDCQnFtBX+BPpqhKjX0l7v1FUZ/4kb1a+pfla2FS8kWBif6bTqvas0A==",
+        'Authorization': "Bearer sfVcw2RU1e4hobI/iZKhJer760t3fB6u1y/ZzcyHzLShf3CKzitss/q8Aqjn12Z27MBqVduG2pVwFb0KHNLnDg==",
         'Content-Type': "application/json",
         'Access-Control-Allow-Origin': "*",
         'cache-control': "no-cache",
-        'Postman-Token': "2c69e106-ec7b-4263-a0d3-3afb35315fa1"
+        'Postman-Token': "cbbbbf1c-4b55-475f-a989-934334c726c6"
         }
 
     response = requests.request("POST", url, data=payload, headers=headers, params=querystring)

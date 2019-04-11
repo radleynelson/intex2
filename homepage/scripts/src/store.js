@@ -13,11 +13,13 @@ export default new Vuex.Store({
     userName: '',
     showMessage: false,
     pageMessage: '',
+    permissions: '',
   },
   getters: {
     userName: state => state.userName,
     showMessage: state => state.showMessage,
     pageMessage: state => state.pageMessage,
+    permissions: state => state.permissions,
 
   },
   mutations: {
@@ -29,6 +31,9 @@ export default new Vuex.Store({
     },
     setPageMessage(state, pageMessage){
       state.pageMessage = pageMessage;
+    },
+    setPermissions(state, permissions){
+      state.permissions = permissions
     }
     
   },

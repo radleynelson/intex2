@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", (context => () => {
   homePageVue.$store.commit('setUserName', context.data.user)
   homePageVue.$store.commit('setShowMessage', context.data.showMessage)
   homePageVue.$store.commit('setPageMessage', context.data.pageMessage)
+  homePageVue.$store.commit('setPermissions', context.data.permissions)
 
 })(DMP_CONTEXT.get()))
 

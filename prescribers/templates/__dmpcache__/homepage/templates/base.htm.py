@@ -5,7 +5,7 @@ STOP_RENDERING = runtime.STOP_RENDERING
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 10
-_modified_time = 1554885480.539456
+_modified_time = 1554924627.71018
 _enable_loop = True
 _template_filename = '/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm'
 _template_uri = 'homepage/templates/base.htm'
@@ -20,16 +20,16 @@ def render_body(context,**pageargs):
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         self = context.get('self', UNDEFINED)
+        request = context.get('request', UNDEFINED)
         def content():
             return render_content(context._locals(__M_locals))
-        request = context.get('request', UNDEFINED)
         __M_writer = context.writer()
         __M_writer('<!DOCTYPE html>\n<html>\n    <meta charset="UTF-8">\n    <head>\n\n        <title>DMP</title>\n\n')
         __M_writer('        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>\n\n')
         __M_writer('        <script src="/django_mako_plus/dmp-common.min.js"></script>\n        ')
         __M_writer(django_mako_plus.ExpressionPostProcessor(self)( django_mako_plus.links(self) ))
         __M_writer('\n\n        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">\n        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>\n        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">\n        <link\n        type="text/css"\n        rel="stylesheet"\n        href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"\n        />\n\n\n    </head>\n    <body>\n\n        <header>\n            <nav class="navbar navbar-expand-lg navbar-light bg-light">\n                <div class="container">\n                  <a class="navbar-brand" href="#">Group 2-13 Intex</a>\n                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">\n                  <span class="navbar-toggler-icon"></span>\n                </button>\n              \n                  <div class="collapse navbar-collapse" id="navbarSupportedContent">\n                    <ul class="navbar-nav ml-auto">\n                        <li class="nav-item">\n                            <a class="nav-link" href="#">Contact</a>\n                        </li>\n                        <li class="nav-item">\n                            <a class="nav-link" href="#">About</a>\n                        </li>\n')
-        if request.user.is_superuser:
+        if request.user.has_perm('admin.dashboard'):
             __M_writer('                            <li class="nav-item">\n                                <a class="nav-link" href="/dashboard">Dashboard</a>\n                            </li>\n')
         if not request.user.is_authenticated:
             __M_writer('                            <li class="nav-item dropdown">\n                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n                                    Account\n                                </a>\n                                <!-- Here\'s the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you\'re all set! -->\n                                <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">\n                                <a class="dropdown-item" href="/account">Login</a>\n                                <a class="dropdown-item" href="/account/signup">Sign Up</a>\n                                <div class="dropdown-divider"></div>\n                                <a class="dropdown-item" href="#">Learn More</a>\n                                </div>\n                            </li>\n')

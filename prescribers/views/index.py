@@ -19,6 +19,11 @@ def process_request(request):
     pageMessage = ''
     showMessage = False
 
+    userPermissions = []
+
+    if(request.user is not None):
+        userPermissions = list(request.user.get_all_permissions())
+
     try:
         pageMessage = request.session['pageMessage']
     except:
@@ -37,7 +42,8 @@ def process_request(request):
         jscontext('data'): {
             'showMessage': showMessage,
             'pageMessage': pageMessage,
-            'user': username
+            'user': username,
+            'permissions': userPermissions,
         }
     }
 
@@ -72,13 +78,58 @@ def prescriber(request, id:dmod.Prescribers):
     dataLeft=list(p2)
     drugs = list(drugList)
 
+    if not request.user.has_perm('admin.analytics'):
+        drugs = []
+
     PrescriberDrugs = {
         'PrescriberData': data,
         'PrescriberDataLeft': dataLeft,
-        'drugs': drugs
+        'drugs': drugs,
     }
     
 
     return JsonResponse(PrescriberDrugs, safe=False)
+
+@view_function
+def related_prescribers(request, prescriber:dmod.Prescribers):
+    
+    if not request.user.is_authenticated:
+        return JsonResponse('You must be authorized to access this data', safe=False)
+
+    if not request.user.has_perm('admin.analytics'):
+        return JsonResponse('You do not have sufficient rights to access this content', safe=False)
+
+    url = "https://ussouthcentral.services.azureml.net/workspaces/4718f244148842c4b087009708bf0c75/services/80172f96647a4920ac62a8846b54af6b/execute"
+
+    querystring = {"api-version":"2.0","details":"true"}
+
+    payload = "{\n  \"Inputs\": {\n    \"input1\": {\n      \"ColumnNames\": [\n        \"prescribers_id\"\n      ],\n      \"Values\": [\n        [\n          \"3\"\n        ]\n      ]\n    }\n  }\n}"
+    headers = {
+        'Authorization': "Bearer /yRI//Z+u2bgaYzHCA2PqqbJgNdC/orSTRJ2a7rb8U4e0DDFTDzncKfhp30KqfUEHTqU4cr1ZoNGTWYnTk70gg==",
+        'Content-Type': "application/json",
+        'Access-Control-Allow-Origin': "*",
+        'cache-control': "no-cache",
+        'Postman-Token': "3d4030b8-c09b-464f-8286-ff8aacce9ffa"
+        }
+
+    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+
+    responseData = json.loads(response.text);
+
+    itemsList = responseData['Results']['output1']['value']['Values'][0]
+
+    prescribers = dmod.Prescribers.objects.filter(pk__in=(itemsList)).values()
+
+    data = []
+
+    for x in prescribers:
+        user = {
+            'userInfo': x,
+            'Top5Drugs': list(dmod.Triple.objects.select_related('opioids').filter(prescribers = x['id']).values('qty', 'opioids__drugname','opioids__isopioid', 'opioids__id').order_by('-qty')[:5])
+        }
+        data.append(user)
+
+    return JsonResponse(data, safe=False)
+
 
 

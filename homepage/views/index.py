@@ -1,14 +1,19 @@
 from django.conf import settings
 from django_mako_plus import view_function, jscontext
 from datetime import datetime, timezone
+from account import models as amod
 
 @view_function
-def process_request(request):
+def process_request(request, user:amod.User = None):
     utc_time = datetime.utcnow()
 
     username = str(request.user.username)
     pageMessage = ''
     showMessage = False
+    userPermissions = []
+
+    if(request.user is not None):
+        userPermissions = list(request.user.get_all_permissions())
 
     try:
         pageMessage = request.session['pageMessage']
@@ -31,7 +36,8 @@ def process_request(request):
         jscontext('data'): {
             'showMessage': showMessage,
             'pageMessage': pageMessage,
-            'user': username
+            'user': username,
+            'permissions': userPermissions
         }
     }
     return request.dmp.render('index.html', context)
