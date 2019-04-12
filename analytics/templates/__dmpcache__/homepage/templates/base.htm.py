@@ -5,10 +5,10 @@ STOP_RENDERING = runtime.STOP_RENDERING
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 10
-_modified_time = 1555012384.396428
+_modified_time = 1555011393.830143
 _enable_loop = True
 _template_filename = '/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm'
-_template_uri = 'homepage/templates/base.htm'
+_template_uri = '/homepage/templates/base.htm'
 _source_encoding = 'utf-8'
 import django_mako_plus
 import django.utils.html
@@ -20,10 +20,10 @@ def render_body(context,**pageargs):
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
         self = context.get('self', UNDEFINED)
-        STATIC_URL = context.get('STATIC_URL', UNDEFINED)
         request = context.get('request', UNDEFINED)
         def content():
             return render_content(context._locals(__M_locals))
+        STATIC_URL = context.get('STATIC_URL', UNDEFINED)
         __M_writer = context.writer()
         __M_writer('<!DOCTYPE html>\n<html>\n    <meta charset="UTF-8">\n    <head>\n\n        <title>DMP</title>\n\n')
         __M_writer('        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>\n\n')
@@ -65,6 +65,6 @@ def render_content(context,**pageargs):
 
 """
 __M_BEGIN_METADATA
-{"filename": "/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm", "uri": "homepage/templates/base.htm", "source_encoding": "utf-8", "line_map": {"18": 0, "28": 2, "29": 10, "30": 13, "31": 14, "32": 14, "33": 32, "34": 32, "35": 45, "36": 46, "37": 50, "38": 51, "39": 63, "40": 64, "41": 66, "42": 66, "43": 73, "48": 82, "54": 80, "60": 80, "66": 60}}
+{"filename": "/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm", "uri": "/homepage/templates/base.htm", "source_encoding": "utf-8", "line_map": {"18": 0, "28": 2, "29": 10, "30": 13, "31": 14, "32": 14, "33": 32, "34": 32, "35": 45, "36": 46, "37": 50, "38": 51, "39": 63, "40": 64, "41": 66, "42": 66, "43": 73, "48": 82, "54": 80, "60": 80, "66": 60}}
 __M_END_METADATA
 """
