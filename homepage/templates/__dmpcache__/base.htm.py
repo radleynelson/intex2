@@ -5,7 +5,7 @@ STOP_RENDERING = runtime.STOP_RENDERING
 __M_dict_builtin = dict
 __M_locals_builtin = locals
 _magic_number = 10
-_modified_time = 1555065057.070312
+_modified_time = 1555071034.698563
 _enable_loop = True
 _template_filename = '/Users/Rad/Desktop/Intex2/intex2/homepage/templates/base.htm'
 _template_uri = 'base.htm'
@@ -21,13 +21,13 @@ def render_body(context,**pageargs):
     __M_caller = context.caller_stack._push_frame()
     try:
         __M_locals = __M_dict_builtin(pageargs=pageargs)
-        STATIC_URL = context.get('STATIC_URL', UNDEFINED)
-        request = context.get('request', UNDEFINED)
-        self = context.get('self', UNDEFINED)
         def content():
             return render_content(context._locals(__M_locals))
+        request = context.get('request', UNDEFINED)
+        STATIC_URL = context.get('STATIC_URL', UNDEFINED)
+        self = context.get('self', UNDEFINED)
         __M_writer = context.writer()
-        __M_writer('<!DOCTYPE html>\n<html>\n    <meta charset="UTF-8">\n    <head>\n\n        <title>DMP</title>\n\n')
+        __M_writer('<!DOCTYPE html>\n<html>\n    <meta charset="UTF-8">\n    <head>\n\n        <title>HHS Opioid Analytics</title>\n\n')
         __M_writer('        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>\n\n')
         __M_writer('        <script src="/django_mako_plus/dmp-common.min.js"></script>\n        ')
         __M_writer(django_mako_plus.ExpressionPostProcessor(self)( django_mako_plus.links(self) ))
@@ -51,7 +51,7 @@ def render_body(context,**pageargs):
                                                 
                 
                 __M_locals_builtin_stored = __M_locals_builtin()
-                __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['p','pid'] if __M_key in __M_locals_builtin_stored]))
+                __M_locals.update(__M_dict_builtin([(__M_key, __M_locals_builtin_stored[__M_key]) for __M_key in ['pid','p'] if __M_key in __M_locals_builtin_stored]))
                 __M_writer('\n                                <div class="dropdown-divider"></div>\n                                    <a class="dropdown-item" href="/prescribers#/items/')
                 __M_writer(django_mako_plus.ExpressionPostProcessor(self)(pid))
                 __M_writer('">My Profile</a>\n                                </div>\n')

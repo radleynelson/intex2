@@ -19,7 +19,7 @@
         <option>10</option>
         <option>25</option>
       </select>
-      <button @click="ExportCSV" style="margin-top: 10px; margin-bottom: 10px;" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
+      <button v-if="dashboardPermissions" @click="ExportCSV" style="margin-top: 10px; margin-bottom: 10px;" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
 
     </div>
     <div style="margin:auto; max-width: 800px; padding-bottom: 5px; grid-template: auto auto auto/auto auto auto; display: grid; grid-column-gap: 10px;">
@@ -99,6 +99,9 @@ export default {
   computed: {
     userName() {
       return this.$store.getters.userName
+    },
+    dashboardPermissions(){
+      return this.$store.getters.permissions.includes('admin.dashboard')
     },
     items() {
       return this.$store.getters.drugsList;

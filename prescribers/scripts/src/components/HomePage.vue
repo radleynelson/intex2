@@ -21,7 +21,7 @@
         <option>100</option>
       </select>
       <div style="display: grid; grid-template: auto auto / auto auto; margin-top: 5px; grid-column-gap: 5px; margin-bottom: 10px;">
-        <button v-if="dataLoaded && !deleting" @click="ExportCSV" style="" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
+        <button v-if="dataLoaded && !deleting && dashboardPermissions" @click="ExportCSV" style="" class="btn btn-info">Download <i class="fas fa-file-csv"></i></button>
         <router-link v-if="dataLoaded && !deleting && crudPermissions" class="btn btn-success" :to="{ name: 'EditPrescriber', params: {id: 0}}">Add Prescriber</router-link>
       </div>
     </div>
@@ -111,6 +111,9 @@ export default {
   computed: {
     userName() {
       return this.$store.getters.userName
+    },
+    dashboardPermissions(){
+      return this.$store.getters.permissions.includes('admin.dashboard')
     },
     crudPermissions(){
       return this.$store.getters.permissions.includes('admin.crud')

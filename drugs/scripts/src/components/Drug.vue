@@ -120,7 +120,10 @@
         computed: {
             permissions() {
                 return this.$store.getters.permissions.includes('admin.analytics') 
-            }
+            },
+            dashboardPermissions(){
+                return this.$store.getters.permissions.includes('admin.dashboard') 
+            },
         },
         created(){
             this.getData()
@@ -145,7 +148,11 @@
                 this.userList = res.data;
                 if(this.$store.getters.permissions.includes('admin.analytics')){
                     res.data.userList.forEach(person => {
-                    this.chartdata.labels.push(person.prescribers__fname + ' ' + person.prescribers__lname)
+                    if(this.dashboardPermissions)
+                        this.chartdata.labels.push(person.prescribers__fname + ' ' + person.prescribers__lname)
+                    else
+                        this.chartdata.labels.push(person.prescribers__doctorid)
+                        
                     this.chartdata.datasets[0].data.push(person.qty)
                 });
                 }

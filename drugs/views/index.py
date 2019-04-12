@@ -72,7 +72,7 @@ def drug(request, id:dmod.Opioids):
     if not request.user.is_authenticated:
         return JsonResponse('You must be authorized to access this data', safe=False)
 
-    d1 = dmod.Triple.objects.select_related('prescribers').filter(opioids = id).values('id','qty','prescribers__fname', 'prescribers__lname','opioids_id')[:10]
+    d1 = dmod.Triple.objects.select_related('prescribers').filter(opioids = id).values('id','qty','prescribers__fname', 'prescribers__lname','opioids_id','prescribers__doctorid')[:10]
     o1 = dmod.Opioids.objects.filter(id = id.id).values()
     
     if not request.user.has_perm('admin.analytics'):
