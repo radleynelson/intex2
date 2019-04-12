@@ -26,7 +26,7 @@ SECRET_KEY = '0z1=6=mb6pnw-$u$yz04*o)ob-3xucvk*dj74)zr1yv&9h=pxs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['is-celebrities-consulting.com', 'localhost']
+ALLOWED_HOSTS = ['is-celebrities-consulting.com', 'www.is-celebrities-consulting.com', 'localhost', '104.211.4.20']
 
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'dashboard',
     'drugs',
     'prescribers',
+    'analytics',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +52,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django_mako_plus.RequestInitMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

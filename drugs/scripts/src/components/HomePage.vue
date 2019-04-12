@@ -45,8 +45,8 @@
         :sort-desc.sync="sortDesc"
         :filter='filterText'
         :filter-function='customFilter'
-        striped = 'true'
-        bordered = 'true'
+        :striped = 'true'
+        :bordered = 'true'
         @filtered="onFiltered"
       >
         <template slot="drugname" slot-scope="data">
@@ -87,11 +87,12 @@ export default {
         filterString: '',
         filterNumber: '',
         rows: 1,
-        filterBool: '',
+        filterBool: 0,
         fields: [
           { key: 'drugname', label: 'Drug Name', sortable: true },
           { key: 'isopioid', label: 'Is Opiod', sortable: true },
-          { key: 'total_prescriptions', label: 'Number of Prescriptions', sortable: true }
+          { key: 'total_prescriptions', label: 'Number of Prescriptions', sortable: true },
+          { key: 'risk_score', label: 'Drug Risk Score', sortable: true }
         ],
       }
     },

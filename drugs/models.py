@@ -1,10 +1,4 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
+
 from django.db import models
 
 class BatchStatistics(models.Model):
@@ -18,17 +12,21 @@ class BatchStatistics(models.Model):
     max = models.FloatField(blank=True, null=True)
     iqr = models.FloatField(db_column='IQR', blank=True, null=True)  # Field name made lowercase.
     upperbound = models.FloatField(db_column='upperBound', blank=True, null=True)  # Field name made lowercase.
-    rank_coefficient = models.IntegerField(blank=True, null=True)
+    rank_coefficient = models.FloatField(blank=True, null=True)
     lastupdated = models.DateTimeField(db_column='lastUpdated', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'batch_statistics'
+        get_latest_by = 'lastupdated'
+
+
 
 class Opioids(models.Model):
     drugname = models.CharField(db_column='DrugName', max_length=50)  # Field name made lowercase.
     isopioid = models.IntegerField(db_column='IsOpioid')  # Field name made lowercase.
     total_prescriptions = models.IntegerField(blank=True, null=True)
+    risk_score = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -37,9 +35,9 @@ class Opioids(models.Model):
 
 class Overdoses(models.Model):
     state = models.CharField(db_column='State', max_length=50)  # Field name made lowercase.
-    population = models.CharField(db_column='Population', max_length=50)  # Field name made lowercase.
-    deaths = models.CharField(db_column='Deaths', max_length=50)  # Field name made lowercase.
-    percent = models.CharField(db_column='Percent', max_length=50)  # Field name made lowercase.
+    population = models.IntegerField(db_column='Population')  # Field name made lowercase.
+    deaths = models.IntegerField(db_column='Deaths')  # Field name made lowercase.
+    percent = models.FloatField(db_column='Percent')  # Field name made lowercase.
     abbrev = models.CharField(db_column='Abbrev', max_length=50)  # Field name made lowercase.
 
     class Meta:

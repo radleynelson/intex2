@@ -29,7 +29,7 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
-                  <a class="navbar-brand" href="#">Group 2-13 Intex</a>
+                  <a class="navbar-brand" href="#"><img height="50" src="${STATIC_URL}homepage/media/logo4.png"/></a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -37,14 +37,15 @@
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a href="/drugs" class="nav-link" href="#">Drugs</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a href="/prescribers" class="nav-link" href="#">Prescribers</a>
                         </li>
-                        % if request.user.is_superuser:
+                        <%! from drugs import models as dmod %>
+                        % if request.user.has_perm('admin.dashboard'):
                             <li class="nav-item">
-                                <a class="nav-link" href="/dashboard">Dashboard</a>
+                                <a class="nav-link" href="/analytics">Dashboard</a>
                             </li>
                         % endif
                         %if not request.user.is_authenticated:
@@ -56,9 +57,7 @@
                                 <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/account">Login</a>
                                 <a class="dropdown-item" href="/account/signup">Sign Up</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Learn More</a>
-                                </div>
+                                
                             </li>
                       %else:
                         <li class="nav-item dropdown">
@@ -68,6 +67,18 @@
                             <!-- Here's the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you're all set! -->
                             <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/account/logout">Logout</a>
+                            %if request.user.has_perm('admin.analytics') and not request.user.has_perm('admin.see_names'):
+                                <% 
+                                    p = dmod.Prescribers.objects.filter(doctorid = request.user.username).first()
+                                    pid = p.id
+                                %>
+                                <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/prescribers#/items/${pid}">My Profile</a>
+                                </div>
+                            %endif
+
+                            </div>
+                            
                         </li>
                       %endif
                     </ul>
@@ -95,30 +106,24 @@
                 <div class="col-md-12 py-5">
                     <div class="mb-5 flex-center">
         
-                        <!-- Facebook -->
                         <a class="fb-ic">
-                        <i class="fab fa-facebook-f fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                            <i class="fab fa-microsoft white-text mr-md-5 mr-3 fa-2x"></i>
                         </a>
-                        <!-- Twitter -->
                         <a class="tw-ic">
-                        <i class="fab fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                            <i class="fab fa-vuejs white-text mr-md-5 mr-3 fa-2x"></i>
                         </a>
-                        <!-- Google +-->
                         <a class="gplus-ic">
-                        <i class="fab fa-google-plus-g fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                            <i class="fab fa-python white-text mr-md-5 mr-3 fa-2x"></i>
                         </a>
-                        <!--Linkedin -->
-                        <a class="li-ic">
-                        <i class="fab fa-linkedin-in fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                        <a class="gplus-ic">
+                            <i class="fas fa-file-medical white-text mr-md-5 mr-3 fa-2x"></i>
                         </a>
-                        <!--Instagram-->
-                        <a class="ins-ic">
-                        <i class="fab fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                        <a class="gplus-ic">
+                            <i class="fas fa-chart-bar white-text mr-md-5 mr-3 fa-2x"></i>
                         </a>
-                        <!--Pinterest-->
-                        <a class="pin-ic">
-                        <i class="fab fa-pinterest fa-lg white-text fa-2x"> </i>
-                        </a>
+
+                        
+                        
                     </div>
                 </div>
                 <!-- Grid column -->
@@ -131,7 +136,7 @@
         
             <!-- Copyright -->
         <div class="footer-copyright text-center py-3">© 2019 Copyright:
-            <a href="http://is-celebrities-consulting.com">is-celebrities-consulting.com</a>
+            <a href="https://www.is-celebrities-consulting.com">is-celebrities-consulting.com</a>
         </div>
             <!-- Copyright -->
     
