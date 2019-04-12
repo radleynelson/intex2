@@ -71,7 +71,7 @@ def prescriber(request, id:dmod.Prescribers):
     queryset = dmod.Prescribers.objects.select_related('specialties','overdoses').filter(id = id.id)
     p1 = queryset.values('gender','opioid_prescriber','risk_rank','isoutlier','overdoses__abbrev','specialties__specialty')
     p2 = queryset.values('id','doctorid','fname','lname','credentials','totalprescriptions','numberofopioidsprescribed')
-    drugList = dmod.Triple.objects.select_related('opioids').filter(prescribers = id).values('qty', 'opioids__drugname','opioids__isopioid', 'opioids__id')
+    drugList = dmod.Triple.objects.select_related('opioids').filter(prescribers = id).values('qty', 'opioids__drugname','opioids__isopioid', 'opioids__id', 'opioids__risk_score').order_by('-qty')
 
 
     data = list(p1)
@@ -200,7 +200,64 @@ def delete_prescriber(request, prescriber:dmod.Prescribers):
     return JsonResponse("Deleted Successfully Successfully", safe=False)
 
 
+@view_function
+def drug_reccomender(request, prescriber:dmod.Prescribers, itemid:str):
+    
+    if not request.user.is_authenticated:
+        return JsonResponse('You must be authorized to access this data', safe=False)
 
+    if not request.user.has_perm('admin.analytics'):
+        return JsonResponse('You do not have sufficient rights to access this content', safe=False)
+
+    url = "https://ussouthcentral.services.azureml.net/workspaces/4718f244148842c4b087009708bf0c75/services/f2f2d674641f44a4ae5d8e214cb96e2b/execute"
+
+    querystring = {"api-version":"2.0","details":"true"}
+
+    payload = "{\n  \"Inputs\": {\n    \"input1\": {\n      \"ColumnNames\": [\n        \"prescribers_id\",\n        \"opioids_id\"\n      ],\n      \"Values\": [\n        [\n          \"" + str(prescriber.id) + "\",\n          \"" + itemid + "\"\n        ]\n      ]\n    }\n  }\n}"
+    headers = {
+        'Authorization': "Bearer Esk2DjqiLohYeWisLD1iNhfzgaYVxxfwm9YalFHWVDGQwxjTanxSCXWhofCLD1KLpIA+1g2akJLl4ELbXZyonA==",
+        'Content-Type': "application/json",
+        'Access-Control-Allow-Origin': "*",
+        'cache-control': "no-cache",
+        'Postman-Token': "c3d107fe-cb93-4e77-b726-36ff79d998f6"
+        }
+
+
+    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+
+    responseData = json.loads(response.text);
+
+    itemsList = responseData['Results']['output1']['value']['Values'][0]
+
+    d = []
+    print()
+    print()
+    print()
+    print()
+    print(itemsList)
+    print()
+    print()
+    print()
+    print()
+
+    for x in itemsList:
+        tempdrug = dmod.Opioids.objects.filter(id = x).values()
+        t = list(tempdrug)
+        if t[0]['isopioid'] == 0:
+            d.append(t[0])
+
+    #drugs = dmod.Opioids.objects.filter(pk__in=(itemsList), isopioid = 1).values().order_by
+
+    print()
+    print()
+    print()
+    print(d)
+    print()
+    print()
+    print()
+    print()
+
+    return JsonResponse(d[:5], safe=False)
 
 
 

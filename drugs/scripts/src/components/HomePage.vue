@@ -91,7 +91,8 @@ export default {
         fields: [
           { key: 'drugname', label: 'Drug Name', sortable: true },
           { key: 'isopioid', label: 'Is Opiod', sortable: true },
-          { key: 'total_prescriptions', label: 'Number of Prescriptions', sortable: true }
+          { key: 'total_prescriptions', label: 'Number of Prescriptions', sortable: true },
+          { key: 'risk_score', label: 'Drug Risk Score', sortable: true }
         ],
       }
     },

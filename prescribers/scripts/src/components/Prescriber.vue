@@ -81,6 +81,23 @@
                             </div>
                         </section>
                     </b-tab>
+                    <b-tab v-if="dashboardPermissions || this.currentUser" title="Reccomended Items">
+                        <section>
+                            <div v-if="!reccomendedItemsVisible">
+                                <b-spinner variant='info' style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
+                            </div>
+                            <div v-if="reccomendedItemsVisible">
+                                <h3>Top 5 Opioid Alternatives</h3>
+                                <b-table :fields="relatedDrugsFields" striped hover :items="reccomendedItems">
+                                    <template slot="drugname" slot-scope="data">
+                                        <a class="related-drug-link" :href="'/drugs#/items/' + data.item.id">
+                                            {{data.item.drugname}}
+                                        </a>
+                                    </template>
+                                </b-table>
+                            </div>
+                        </section>
+                    </b-tab>
                 </b-tabs>  
             </div>
         </section>
@@ -98,10 +115,17 @@
         data() {
             return {
                 test: 3,
+                reccomendedItemsVisible: false,
                 relatedItems: [],
+                reccomendedItems:[],
                 currentPage: 1,
                 drugsInGraph: 5,
                 sortBy: 'qty',
+                relatedDrugsFields: [
+          { key: 'drugname', label: 'Drug Name', sortable: true },
+          { key: 'total_prescriptions', label: 'Number of Prescriptions', sortable: true },
+          { key: 'risk_score', label: 'Risk Rank', sortable: true },
+        ],
                 sortDesc: true,
                 filterText: '',
                 relatedUsers: [],
@@ -111,6 +135,7 @@
           { key: 'opioids__drugname', label: 'Drug Name', sortable: true },
           { key: 'qty', label: 'Number of Prescriptions', sortable: true },
           { key: 'opioids__isopioid', label: 'Is Opioid', sortable: true },
+          { key: 'opioids__risk_score', label: 'Risk Score', sortable: true }
         ],
                 relatedItemsVisible: false,
                 prescriberDrugsList: [],
@@ -159,7 +184,6 @@
             }]
         },
          onClick: function(event, i){
-             console.log('it worked!!!!!!')
              console.log(event)
              console.log(i)
               let e = i[0];
@@ -175,6 +199,15 @@
         computed: {
             analyticsPermissions(){
                 return this.$store.getters.permissions.includes('admin.analytics')
+            },
+            dashboardPermissions(){
+                return this.$store.getters.permissions.includes('admin.dashboard')
+            },
+            currentUser(){
+                if(this.prescriberLeft.length < 1)
+                    return false;
+                else
+                    return this.$store.getters.userName == this.prescriberLeft[0]['Doctor Id'];
             }
         },
         created(){
@@ -183,8 +216,10 @@
         },
         watch: {
             '$route' (to, from) {
+                this.reccomendedItemsVisible = false
                 this.getData();
                 this.getRelatedUsers();
+                this.finalRelatedUsers = [];
             }
         },
         methods: {
@@ -202,6 +237,14 @@
                             Drugs: person.Top5Drugs
                         })
                     });
+                })
+            },
+            getReccomendedItems(){
+                axios.get('/prescribers/index.drug_reccomender/' + this.$route.params.id + '/' + this.prescriberDrugsList[0].opioids__id).then(res => {
+                    this.reccomendedItems = res.data;
+                    this.reccomendedItemsVisible = true;
+                }).catch(err => {
+                    console.log(err);
                 })
             },
             getData(){
@@ -263,6 +306,11 @@
                         this.chartdata.datasets[0].data.push(res.data.drugs[i].qty)
                     }
                     this.dataVisible = true;   
+            }).then(res => {
+                if(this.dashboardPermissions || this.currentUser){
+                    this.getReccomendedItems()
+                }
+
             }).catch(err => {
                 console.log(err);
             })

@@ -31,7 +31,8 @@
                             <tr>
                                 <th>Drug Name</th>
                                 <th>Times Prescirbed</th>
-                                <th>Drug Is Opioid</th>
+                                <th>Is Opioid</th>
+                                <th>Risk Score</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,6 +40,7 @@
                                 <td><router-link class="related-drug-link" :to="{ name: 'Drug', params: {id: data.id}}">{{data.drugname}}</router-link></td>
                                 <td>{{data.total_prescriptions}}</td>
                                 <td>{{data.isopioid == 1 ? 'Yes' : 'No'}}</td>
+                                <td>{{data.risk_score}}</td>
                             </tr>
                         </tbody>
                     </table>

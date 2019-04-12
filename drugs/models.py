@@ -18,6 +18,7 @@ class BatchStatistics(models.Model):
     class Meta:
         managed = False
         db_table = 'batch_statistics'
+        get_latest_by = 'lastupdated'
 
 
 

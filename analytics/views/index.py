@@ -10,6 +10,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.serializers import serialize
 import requests
 import json
+from decimal import Decimal
 from django.http import HttpResponseRedirect
 
 
@@ -149,6 +150,38 @@ def getSpider(request, doctor:dmod.Prescribers, doctor2:dmod.Prescribers):
         'percent2': ((doctor2.numberofopioidsprescribed/doctor2.totalprescriptions) * 100),
         'state-percent2': state2.percent * 3000,
         'doctorid2': doctor2.doctorid
+    }
+
+    
+    return JsonResponse(retrunValue, safe=False)
+
+@view_function
+def getkpis(request):
+    
+    if not request.user.is_authenticated:
+        return JsonResponse('You must be authorized to access this data', safe=False)
+
+    if not request.user.has_perm('admin.dashboard'):
+        return JsonResponse('You do not have sufficient rights to access this content', safe=False)
+
+    k1 = dmod.Triple.objects.select_related('opioids').values('opioids__isopioid').annotate(Sum('qty'))
+
+    k1list = list(k1)
+
+    k2 = dmod.Prescribers.objects.filter(risk_rank=100).count()
+
+    k3 = dmod.BatchStatistics.objects.latest()
+
+    k5 = dmod.Prescribers.objects.filter(risk_rank__gt = k3.upperbound).count()
+
+
+    retrunValue = {
+        'opioid_ratio':  round((k1list[1]['qty__sum'] / k1list[0]['qty__sum']) * 100, 2),
+        'only_prescribing_opioids': k2,
+        'mean_risk_rank': round(k3.mean,2),
+        'upper_bound_risk_rank': k3.upperbound,
+        'prescribers_at_risk': k5
+
     }
 
     

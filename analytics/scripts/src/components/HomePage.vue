@@ -1,6 +1,44 @@
 <template>
   <div class="app">
+    <h1>Opioid Statistics Dashboard</h1>
+    <b-spinner v-if='!kpisVisible' style="width: 4rem; height: 4rem;" label="Loading..."></b-spinner>
     <section>
+      <div style="margin-top:15px;" v-if="kpis != null">
+        <b-row>
+          <b-col>
+            <p>Mean Risk Rank</p>
+          </b-col>
+          <b-col>
+            <p>100% Opioid Prescribers</p>
+          </b-col>
+          <b-col>
+            <p>Percent Opioid Prescriptoins</p>
+          </b-col>
+          <b-col>
+            <p>At Risk Prescribers</p>
+          </b-col>
+          <b-col>
+            <p>At Risk Limit</p>
+          </b-col>
+        </b-row>
+        <b-row style=" margin-bottom:30px;">
+          <b-col class="bg-primary text-white">
+            <h2>{{kpis.mean_risk_rank}}</h2>
+          </b-col>
+          <b-col class="bg-warning text-white">
+            <h2>{{kpis.only_prescribing_opioids}}</h2>
+          </b-col>
+          <b-col class="bg-success text-white">
+            <h2>{{kpis.opioid_ratio}}%</h2>
+          </b-col>
+          <b-col class="bg-danger text-white">
+            <h2>{{kpis.prescribers_at_risk}}</h2>
+          </b-col>
+          <b-col class="bg-info text-white">
+            <h2>{{kpis.upper_bound_risk_rank}}</h2>
+          </b-col>
+        </b-row>
+      </div>
       <b-row>
         <b-col>
           <h3>Opioids Total Prescriptions</h3>
@@ -83,6 +121,8 @@ export default {
       RadarPrescriber1: null,
       RadarPrescriber2: null,
       opioidsDrugData: null,
+      kpis: null,
+      kpisVisible: false,
       dataVisible: false,
       topSpecialties: null,
       radarChartData: {
@@ -256,6 +296,7 @@ export default {
     }
   },
   created(){
+    this.getKpis()
     this.getOpioids()
     this.getTopPrescribers()
     this.getTopSpecialties()
@@ -267,6 +308,14 @@ export default {
     }
   },
   methods: {
+    getKpis(){
+      axios.get('/analytics/index.getkpis').then(res => {
+        this.kpis = res.data;
+        this.kpisVisible = true;
+      }).catch(err => {
+        console.log(err);
+      })
+    },
     syncSpider(){
       axios.get('/analytics/index.getSpider/'+ this.RadarPrescriber1 + '/'+this.RadarPrescriber2).then(res => {
         let test = []
